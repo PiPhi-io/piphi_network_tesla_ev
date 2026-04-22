@@ -296,15 +296,22 @@ export function getEntities(): RuntimeEntity[] {
       "charge_limit_soc",
       "time_to_full_charge_hours",
       "charger_power_kw",
+      "battery_range_miles",
+      "charge_current_amps",
+      "charge_energy_added_kwh",
+      "plugged_in",
       "inside_temp_c",
       "outside_temp_c",
       "climate_on",
       "is_locked",
       "odometer_miles",
       "speed_mph",
+      "vehicle_state",
+      "shift_state",
+      "last_refresh_at",
     ];
     if (includeLocation) {
-      capabilities.push("latitude", "longitude");
+      capabilities.push("latitude", "longitude", "heading_degrees");
     }
 
     return [

@@ -37,6 +37,10 @@ export interface TeslaVehicleState {
   chargeLimitSoc: number | null;
   timeToFullChargeHours: number | null;
   chargerPowerKw: number | null;
+  batteryRangeMiles: number | null;
+  chargeCurrentAmps: number | null;
+  chargeEnergyAddedKwh: number | null;
+  pluggedIn: boolean | null;
   insideTempC: number | null;
   outsideTempC: number | null;
   climateOn: boolean | null;

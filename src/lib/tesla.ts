@@ -32,6 +32,40 @@ function asArray<T>(value: unknown): T[] {
   return Array.isArray(value) ? (value as T[]) : [];
 }
 
+function inferPluggedIn(
+  chargeState: Record<string, unknown>,
+  chargingState: string | null,
+): boolean | null {
+  const cableType = asString(chargeState.conn_charge_cable) ?? asString(chargeState.charging_cable_type);
+  if (cableType) {
+    const normalized = cableType.trim().toLowerCase();
+    if (normalized === "<invalid>" || normalized === "invalid" || normalized === "none") {
+      return false;
+    }
+    if (normalized.includes("no") && normalized.includes("cable")) {
+      return false;
+    }
+    return true;
+  }
+
+  const chargePortDoorOpen = asBoolean(chargeState.charge_port_door_open);
+  if (chargePortDoorOpen === true) {
+    return true;
+  }
+
+  if (chargingState) {
+    const normalized = chargingState.trim().toLowerCase();
+    if (normalized === "disconnected") {
+      return false;
+    }
+    if (["charging", "complete", "starting", "stopped", "pending", "nopower"].includes(normalized)) {
+      return true;
+    }
+  }
+
+  return null;
+}
+
 export function resolveFleetApiBaseUrl(
   region: TeslaRegion = "na",
   override?: string | null,
@@ -169,6 +203,10 @@ export function normalizeVehicleSummaryState(config: TeslaVehicleConfig, summary
     chargeLimitSoc: null,
     timeToFullChargeHours: null,
     chargerPowerKw: null,
+    batteryRangeMiles: null,
+    chargeCurrentAmps: null,
+    chargeEnergyAddedKwh: null,
+    pluggedIn: null,
     insideTempC: null,
     outsideTempC: null,
     climateOn: null,
@@ -199,7 +237,17 @@ export function normalizeVehicleDataState(
   const vehicleState = asObject(vehicleData.vehicle_state);
 
   const includeLocation = config.include_location !== false;
+  const chargingState = asString(chargeState.charging_state);
   const chargerPowerKwValue = asNumber(chargeState.charger_power);
+  const batteryRangeMilesValue =
+    asNumber(chargeState.battery_range) ??
+    asNumber(chargeState.est_battery_range) ??
+    asNumber(chargeState.ideal_battery_range);
+  const chargeCurrentAmpsValue =
+    asNumber(chargeState.charger_actual_current) ??
+    asNumber(chargeState.charge_current_request) ??
+    asNumber(chargeState.charge_current_request_max);
+  const chargeEnergyAddedKwhValue = asNumber(chargeState.charge_energy_added);
   const refreshedAt = new Date().toISOString();
 
   return {
@@ -208,10 +256,14 @@ export function normalizeVehicleDataState(
     vehicleState: asString(vehicleData.state) ?? state.vehicleState,
     batteryLevel: asNumber(chargeState.battery_level),
     usableBatteryLevel: asNumber(chargeState.usable_battery_level),
-    chargingState: asString(chargeState.charging_state),
+    chargingState,
     chargeLimitSoc: asNumber(chargeState.charge_limit_soc),
     timeToFullChargeHours: asNumber(chargeState.time_to_full_charge),
     chargerPowerKw: chargerPowerKwValue,
+    batteryRangeMiles: batteryRangeMilesValue,
+    chargeCurrentAmps: chargeCurrentAmpsValue,
+    chargeEnergyAddedKwh: chargeEnergyAddedKwhValue,
+    pluggedIn: inferPluggedIn(chargeState, chargingState),
     insideTempC: asNumber(climateState.inside_temp),
     outsideTempC: asNumber(climateState.outside_temp),
     climateOn: asBoolean(climateState.is_climate_on),
@@ -243,6 +295,10 @@ export function buildTelemetryMetrics(state: TeslaVehicleState): {
     charge_limit_soc: state.chargeLimitSoc,
     time_to_full_charge_hours: state.timeToFullChargeHours,
     charger_power_kw: state.chargerPowerKw,
+    battery_range_miles: state.batteryRangeMiles,
+    charge_current_amps: state.chargeCurrentAmps,
+    charge_energy_added_kwh: state.chargeEnergyAddedKwh,
+    plugged_in: state.pluggedIn,
     inside_temp_c: state.insideTempC,
     outside_temp_c: state.outsideTempC,
     climate_on: state.climateOn,
@@ -250,7 +306,9 @@ export function buildTelemetryMetrics(state: TeslaVehicleState): {
     odometer_miles: state.odometerMiles,
     speed_mph: state.speedMph,
     vehicle_state: state.vehicleState,
+    heading_degrees: state.headingDegrees,
     shift_state: state.shiftState,
+    last_refresh_at: state.lastRefreshAt,
   };
 
   if (state.includeLocation) {
@@ -264,10 +322,14 @@ export function buildTelemetryMetrics(state: TeslaVehicleState): {
     charge_limit_soc: "%",
     time_to_full_charge_hours: "h",
     charger_power_kw: "kW",
+    battery_range_miles: "mi",
+    charge_current_amps: "A",
+    charge_energy_added_kwh: "kWh",
     inside_temp_c: "C",
     outside_temp_c: "C",
     odometer_miles: "mi",
     speed_mph: "mph",
+    heading_degrees: "degrees",
   };
 
   if (state.includeLocation) {
