@@ -90,5 +90,15 @@ export interface DiscoverVehiclesOptions {
 export interface TeslaCommandPayload {
   command?: string;
   configId?: string | null;
+  config_id?: string | null;
+  deviceId?: string | null;
+  device_id?: string | null;
+  contractVersion?: string | null;
+  contract_version?: string | null;
+  capability?: string | null;
+  capabilityRequirements?: string[];
+  capability_requirements?: string[];
+  target?: Record<string, unknown>;
+  params?: Record<string, unknown>;
   args?: Record<string, unknown>;
 }

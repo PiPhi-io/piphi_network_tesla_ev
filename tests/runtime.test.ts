@@ -909,6 +909,111 @@ test("refresh command without configId uses the primary config", async () => {
   }
 });
 
+test("command route accepts automation runtime contract payload", async () => {
+  resetRuntimeState();
+  const fakeTesla = new FakeTeslaServer();
+  const { baseUrl: teslaBaseUrl } = await fakeTesla.start();
+  const { runtimeBaseUrl, mockCore, stop } = await startRuntimeAndCore();
+
+  try {
+    starter.runtime.processState.coreBaseUrl = mockCore.baseUrl;
+    const headers = buildHeaders();
+    await fetch(`${runtimeBaseUrl}/config`, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: "cfg-contract",
+        configId: "cfg-contract",
+        vin: "5YJ3E1EA7LF000000",
+        access_token: "test-token",
+        region: "na",
+        base_url: teslaBaseUrl,
+      }),
+    });
+
+    const refresh = await fetch(`${runtimeBaseUrl}/command`, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contract_version: "automation.runtime.command.v1",
+        command: "refresh_readings",
+        target: {
+          config_id: "cfg-contract",
+          device_id: "5YJ3E1EA7LF000000",
+        },
+        params: { force: true },
+        capability: "device.refresh",
+        capability_requirements: ["device.refresh"],
+      }),
+    });
+
+    assert.equal(refresh.status, 200);
+    const payload = await readJson(refresh);
+    assert.equal(payload.command, "refresh");
+    assert.equal(payload.contract_version, "automation.runtime.command.v1");
+    assert.equal(payload.configId, "cfg-contract");
+    assert.deepEqual(payload.params, { force: true });
+  } finally {
+    await stop();
+    await fakeTesla.stop();
+  }
+});
+
+test("command route rejects unsupported automation capability", async () => {
+  resetRuntimeState();
+  const fakeTesla = new FakeTeslaServer();
+  const { baseUrl: teslaBaseUrl } = await fakeTesla.start();
+  const { runtimeBaseUrl, mockCore, stop } = await startRuntimeAndCore();
+
+  try {
+    starter.runtime.processState.coreBaseUrl = mockCore.baseUrl;
+    const headers = buildHeaders();
+    await fetch(`${runtimeBaseUrl}/config`, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: "cfg-capability",
+        configId: "cfg-capability",
+        vin: "5YJ3E1EA7LF000000",
+        access_token: "test-token",
+        region: "na",
+        base_url: teslaBaseUrl,
+      }),
+    });
+
+    const response = await fetch(`${runtimeBaseUrl}/command`, {
+      method: "POST",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        command: "refresh",
+        configId: "cfg-capability",
+        capability: "switch.power",
+      }),
+    });
+
+    assert.equal(response.status, 500);
+    const payload = await readJson(response);
+    assert.equal(payload.ok, false);
+    assert.equal(payload.error, "runtime_command_failed");
+    assert.equal(payload.reason, "Unsupported capability: switch.power");
+  } finally {
+    await stop();
+    await fakeTesla.stop();
+  }
+});
+
 test("command route returns 500 for missing and unsupported commands", async () => {
   resetRuntimeState();
   const { runtimeBaseUrl, stop, mockCore } = await startRuntimeAndCore();

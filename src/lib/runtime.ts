@@ -360,7 +360,9 @@ export function getEventsPayload(): ReturnType<typeof buildEventListResponse<Tes
 }
 
 export async function runTeslaCommand(payload: TeslaCommandPayload): Promise<Record<string, unknown>> {
-  const configId = payload.configId ?? registry.primaryEntry()?.configId ?? null;
+  const target = payload.target ?? {};
+  const targetConfigId = typeof target.config_id === "string" ? target.config_id : null;
+  const configId = payload.configId ?? payload.config_id ?? targetConfigId ?? registry.primaryEntry()?.configId ?? null;
   if (!configId) {
     throw new Error("No Tesla config is active");
   }
@@ -370,9 +372,28 @@ export async function runTeslaCommand(payload: TeslaCommandPayload): Promise<Rec
     throw new Error(`Unknown Tesla config: ${configId}`);
   }
 
-  const command = payload.command?.trim();
+  const rawCommand = payload.command?.trim();
+  const command = rawCommand === "tesla.refresh" || rawCommand === "refresh_readings" ? "refresh" : rawCommand;
   if (!command) {
     throw new Error("Missing command");
+  }
+
+  const requirements = [
+    payload.capability,
+    ...(payload.capabilityRequirements ?? []),
+    ...(payload.capability_requirements ?? []),
+  ].filter((value): value is string => Boolean(value && value.trim()));
+  const supportedCapabilities = new Set([
+    "action.refresh",
+    "action.wake_up",
+    "device.refresh",
+    "tesla.refresh",
+    "tesla.vehicle_state",
+    "tesla.wake",
+  ]);
+  const unsupportedCapability = requirements.find((capability) => !supportedCapabilities.has(capability));
+  if (unsupportedCapability) {
+    throw new Error(`Unsupported capability: ${unsupportedCapability}`);
   }
 
   if (command === "refresh") {
@@ -380,7 +401,10 @@ export async function runTeslaCommand(payload: TeslaCommandPayload): Promise<Rec
     return {
       ok: true,
       command,
+      contract_version: payload.contractVersion ?? payload.contract_version ?? null,
       configId,
+      target,
+      params: payload.params ?? payload.args ?? {},
       state: refreshed.latestState,
     };
   }
@@ -411,7 +435,10 @@ export async function runTeslaCommand(payload: TeslaCommandPayload): Promise<Rec
     return {
       ok: true,
       command,
+      contract_version: payload.contractVersion ?? payload.contract_version ?? null,
       configId,
+      target,
+      params: payload.params ?? payload.args ?? {},
       state: latestState,
     };
   }

@@ -269,9 +269,18 @@ app.post(
   wrapAsync(async (req, res) => {
     const body = getRequestPayload(req);
     syncRuntimeAuth(req, body);
+    const target = body.target && typeof body.target === "object" ? body.target as Record<string, unknown> : {};
     const result = await runTeslaCommand({
       command: asString(body.command) ?? undefined,
-      configId: asString(body.configId) ?? asString(body.config_id),
+      configId: asString(body.configId) ?? asString(body.config_id) ?? asString(target.config_id),
+      deviceId: asString(body.deviceId) ?? asString(body.device_id) ?? asString(target.device_id),
+      contractVersion: asString(body.contractVersion) ?? asString(body.contract_version),
+      capability: asString(body.capability),
+      capabilityRequirements: Array.isArray(body.capability_requirements)
+        ? body.capability_requirements.map((item) => String(item))
+        : undefined,
+      target,
+      params: body.params && typeof body.params === "object" ? (body.params as Record<string, unknown>) : undefined,
       args: body.args && typeof body.args === "object" ? (body.args as Record<string, unknown>) : undefined,
     });
     writeJson(res, 200, result);
@@ -303,7 +312,7 @@ app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
   if (res.headersSent) {
     return;
   }
-  writeJson(res, 500, { ok: false, reason: message });
+  writeJson(res, 500, { ok: false, error: "runtime_command_failed", reason: message, message });
 });
 
 export function createTeslaRuntimeServer(): http.Server {
