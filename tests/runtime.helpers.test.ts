@@ -211,7 +211,7 @@ test("refreshEntry keeps summary-only state when Tesla reports a sleeping vehicl
     assert.equal(refreshed.latestState?.source, "summary");
     assert.equal(mockCore.telemetryRequests.length, 2);
     const latest = mockCore.telemetryRequests.at(-1);
-    assert.equal(latest?.body?.metrics?.battery_level, null);
+    assert.equal("battery_level" in (latest?.body?.metrics ?? {}), false);
   } finally {
     await fakeTesla.stop();
     await mockCore.stop();

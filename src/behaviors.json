@@ -64,7 +64,13 @@
             }
           ],
           "capability": "sensor.battery_level",
-          "operators": ["<", "<=", ">", ">=", "eq"],
+          "operators": [
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "battery_level",
@@ -96,7 +102,13 @@
             }
           ],
           "capability": "sensor.usable_battery_level",
-          "operators": ["<", "<=", ">", ">=", "eq"],
+          "operators": [
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "usable_battery_level",
@@ -120,12 +132,21 @@
               "label": "Charging status",
               "type": "enum",
               "default": "Charging",
-              "options": ["Charging", "Stopped", "Complete", "Disconnected", "NoPower"],
+              "options": [
+                "Charging",
+                "Stopped",
+                "Complete",
+                "Disconnected",
+                "NoPower"
+              ],
               "required": true
             }
           ],
           "capability": "sensor.charging_state",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "charging_state",
@@ -157,7 +178,13 @@
             }
           ],
           "capability": "sensor.charge_limit_soc",
-          "operators": ["<", "<=", ">", ">=", "eq"],
+          "operators": [
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "charge_limit_soc",
@@ -189,7 +216,13 @@
             }
           ],
           "capability": "sensor.time_to_full_charge_hours",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "time_to_full_charge_hours",
@@ -221,7 +254,13 @@
             }
           ],
           "capability": "sensor.charger_power_kw",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "charger_power_kw",
@@ -253,7 +292,13 @@
             }
           ],
           "capability": "sensor.battery_range_miles",
-          "operators": ["<", "<=", ">", ">=", "eq"],
+          "operators": [
+            "<",
+            "<=",
+            ">",
+            ">=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "battery_range_miles",
@@ -285,7 +330,13 @@
             }
           ],
           "capability": "sensor.charge_current_amps",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "charge_current_amps",
@@ -317,7 +368,13 @@
             }
           ],
           "capability": "sensor.charge_energy_added_kwh",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "charge_energy_added_kwh",
@@ -336,7 +393,10 @@
           "label": "Vehicle is plugged in",
           "type": "boolean",
           "capability": "sensor.plugged_in",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "plugged_in",
@@ -355,7 +415,10 @@
           "label": "Vehicle is online",
           "type": "boolean",
           "capability": "sensor.online",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "online",
@@ -387,7 +450,13 @@
             }
           ],
           "capability": "sensor.inside_temp_c",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "inside_temp_c",
@@ -419,7 +488,13 @@
             }
           ],
           "capability": "sensor.outside_temp_c",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "outside_temp_c",
@@ -438,7 +513,10 @@
           "label": "Climate is running",
           "type": "boolean",
           "capability": "sensor.climate_on",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "climate_on",
@@ -457,7 +535,10 @@
           "label": "Vehicle is locked",
           "type": "boolean",
           "capability": "sensor.is_locked",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "is_locked",
@@ -489,7 +570,13 @@
             }
           ],
           "capability": "sensor.odometer_miles",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "odometer_miles",
@@ -521,7 +608,13 @@
             }
           ],
           "capability": "sensor.speed_mph",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "speed_mph",
@@ -545,12 +638,20 @@
               "label": "Connection state",
               "type": "enum",
               "default": "online",
-              "options": ["online", "asleep", "offline", "unknown"],
+              "options": [
+                "online",
+                "asleep",
+                "offline",
+                "unknown"
+              ],
               "required": true
             }
           ],
           "capability": "sensor.vehicle_state",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "vehicle_state",
@@ -574,12 +675,20 @@
               "label": "Gear selection",
               "type": "enum",
               "default": "P",
-              "options": ["P", "R", "N", "D"],
+              "options": [
+                "P",
+                "R",
+                "N",
+                "D"
+              ],
               "required": true
             }
           ],
           "capability": "sensor.shift_state",
-          "operators": ["eq", "neq"],
+          "operators": [
+            "eq",
+            "neq"
+          ],
           "runtime": {
             "source": "state",
             "field": "shift_state",
@@ -611,7 +720,13 @@
             }
           ],
           "capability": "sensor.heading_degrees",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "heading_degrees",
@@ -643,7 +758,13 @@
             }
           ],
           "capability": "sensor.latitude",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "latitude",
@@ -675,7 +796,13 @@
             }
           ],
           "capability": "sensor.longitude",
-          "operators": [">", ">=", "<", "<=", "eq"],
+          "operators": [
+            ">",
+            ">=",
+            "<",
+            "<=",
+            "eq"
+          ],
           "runtime": {
             "source": "state",
             "field": "longitude",
@@ -700,7 +827,10 @@
             "command": "refresh"
           },
           "targeting": {
-            "modes": ["picked_devices", "by_integration"],
+            "modes": [
+              "picked_devices",
+              "by_integration"
+            ],
             "minTargets": 1,
             "maxTargets": 1
           },
@@ -715,6 +845,9 @@
           },
           "ui": {
             "group": "do_this"
+          },
+          "safety": {
+            "riskLevel": "low"
           }
         },
         {
@@ -726,7 +859,10 @@
             "command": "wake_up"
           },
           "targeting": {
-            "modes": ["picked_devices", "by_integration"],
+            "modes": [
+              "picked_devices",
+              "by_integration"
+            ],
             "minTargets": 1,
             "maxTargets": 1
           },
@@ -741,6 +877,9 @@
           },
           "ui": {
             "group": "do_this"
+          },
+          "safety": {
+            "riskLevel": "medium"
           }
         }
       ],
@@ -756,7 +895,9 @@
               "label": "Allowed gear",
               "type": "enum",
               "default": "P",
-              "options": ["P"],
+              "options": [
+                "P"
+              ],
               "required": true
             }
           ],
@@ -778,7 +919,12 @@
           "description": "Pause or continue if Tesla readings show a manual change after this automation starts.",
           "runtime": {
             "source": "state",
-            "fields": ["charging_state", "climate_on", "is_locked", "shift_state"]
+            "fields": [
+              "charging_state",
+              "climate_on",
+              "is_locked",
+              "shift_state"
+            ]
           },
           "ui": {
             "group": "override"
@@ -786,7 +932,10 @@
         }
       ],
       "targeting": {
-        "modes": ["picked_devices", "by_integration"],
+        "modes": [
+          "picked_devices",
+          "by_integration"
+        ],
         "supportsGroups": false,
         "supportsRooms": false
       },
@@ -921,7 +1070,9 @@
             },
             "target": {
               "mode": "selection",
-              "configIds": ["{{configId}}"]
+              "configIds": [
+                "{{configId}}"
+              ]
             },
             "parameters": {},
             "failure": {
@@ -1029,7 +1180,9 @@
             },
             "target": {
               "mode": "selection",
-              "configIds": ["{{configId}}"]
+              "configIds": [
+                "{{configId}}"
+              ]
             },
             "parameters": {},
             "failure": {
@@ -1058,7 +1211,9 @@
             },
             "target": {
               "mode": "selection",
-              "configIds": ["{{configId}}"]
+              "configIds": [
+                "{{configId}}"
+              ]
             },
             "parameters": {},
             "failure": {
@@ -1104,5 +1259,101 @@
       }
     }
   ],
-  "behaviorSchemaVersion": "integration.behaviors.v2"
+  "behaviorSchemaVersion": "integration.behaviors.v2",
+  "telemetry": {
+    "capabilityMappings": [
+      {
+        "nativeMetric": "battery_level",
+        "capability": "sensor.battery_level"
+      },
+      {
+        "nativeMetric": "battery_range_miles",
+        "capability": "sensor.battery_range_miles"
+      },
+      {
+        "nativeMetric": "charge_current_amps",
+        "capability": "sensor.charge_current_amps"
+      },
+      {
+        "nativeMetric": "charge_energy_added_kwh",
+        "capability": "sensor.charge_energy_added_kwh"
+      },
+      {
+        "nativeMetric": "charge_limit_soc",
+        "capability": "sensor.charge_limit_soc"
+      },
+      {
+        "nativeMetric": "charger_power_kw",
+        "capability": "sensor.charger_power_kw"
+      },
+      {
+        "nativeMetric": "charging_state",
+        "capability": "sensor.charging_state"
+      },
+      {
+        "nativeMetric": "climate_on",
+        "capability": "sensor.climate_on"
+      },
+      {
+        "nativeMetric": "heading_degrees",
+        "capability": "sensor.heading_degrees"
+      },
+      {
+        "nativeMetric": "inside_temp_c",
+        "capability": "sensor.inside_temp_c"
+      },
+      {
+        "nativeMetric": "is_locked",
+        "capability": "sensor.is_locked"
+      },
+      {
+        "nativeMetric": "last_refresh_at",
+        "capability": "sensor.last_refresh_at"
+      },
+      {
+        "nativeMetric": "latitude",
+        "capability": "sensor.latitude"
+      },
+      {
+        "nativeMetric": "longitude",
+        "capability": "sensor.longitude"
+      },
+      {
+        "nativeMetric": "odometer_miles",
+        "capability": "sensor.odometer_miles"
+      },
+      {
+        "nativeMetric": "online",
+        "capability": "sensor.online"
+      },
+      {
+        "nativeMetric": "outside_temp_c",
+        "capability": "sensor.outside_temp_c"
+      },
+      {
+        "nativeMetric": "plugged_in",
+        "capability": "sensor.plugged_in"
+      },
+      {
+        "nativeMetric": "shift_state",
+        "capability": "sensor.shift_state"
+      },
+      {
+        "nativeMetric": "speed_mph",
+        "capability": "sensor.speed_mph"
+      },
+      {
+        "nativeMetric": "time_to_full_charge_hours",
+        "capability": "sensor.time_to_full_charge_hours"
+      },
+      {
+        "nativeMetric": "usable_battery_level",
+        "capability": "sensor.usable_battery_level"
+      },
+      {
+        "nativeMetric": "vehicle_state",
+        "capability": "sensor.vehicle_state"
+      }
+    ]
+  }
 }

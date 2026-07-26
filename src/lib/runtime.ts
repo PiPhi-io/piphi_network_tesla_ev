@@ -89,7 +89,11 @@ export function appendLocalEvent(values: {
   );
 }
 
-async function deliverTelemetry(state: TeslaVehicleState, containerId?: string | null): Promise<void> {
+async function deliverTelemetry(
+  configId: string,
+  state: TeslaVehicleState,
+  containerId?: string | null,
+): Promise<void> {
   const { metrics, units } = buildTelemetryMetrics(state);
   await scheduleTelemetryDelivery({
     processState: starter.runtime.processState,
@@ -98,6 +102,7 @@ async function deliverTelemetry(state: TeslaVehicleState, containerId?: string |
     }),
     authContext: starter.runtime.auth,
     deviceId: state.deviceId,
+    configId,
     containerId,
     metrics,
     units,
@@ -139,7 +144,7 @@ export async function refreshEntry(configId: string): Promise<TeslaRuntimeEntry>
   });
 
   try {
-    await deliverTelemetry(nextState, entry.containerId ?? null);
+    await deliverTelemetry(configId, nextState, entry.containerId ?? null);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     const degradedState: TeslaVehicleState = {

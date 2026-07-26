@@ -298,7 +298,7 @@ test("listVehicles returns an empty list when Tesla responds with a non-array pa
   }
 });
 
-test("buildTelemetryMetrics preserves nullable values and command-free summary states", () => {
+test("buildTelemetryMetrics omits nullable values and preserves command-free summary states", () => {
   resetRuntimeState();
   const state = normalizeVehicleSummaryState(
     {
@@ -318,7 +318,7 @@ test("buildTelemetryMetrics preserves nullable values and command-free summary s
 
   const telemetry = buildTelemetryMetrics(state);
   assert.equal(telemetry.metrics.online, false);
-  assert.equal(telemetry.metrics.battery_level, null);
+  assert.equal("battery_level" in telemetry.metrics, false);
   assert.equal(telemetry.metrics.vehicle_state, "offline");
   assert.equal(telemetry.units.speed_mph, "mph");
 });

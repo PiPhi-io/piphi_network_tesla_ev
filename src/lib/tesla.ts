@@ -284,10 +284,10 @@ export function normalizeVehicleDataState(
 }
 
 export function buildTelemetryMetrics(state: TeslaVehicleState): {
-  metrics: Record<string, unknown>;
+  metrics: Record<string, boolean | number | string>;
   units: Record<string, string>;
 } {
-  const metrics: Record<string, unknown> = {
+  const rawMetrics: Record<string, unknown> = {
     online: state.online,
     battery_level: state.batteryLevel,
     usable_battery_level: state.usableBatteryLevel,
@@ -312,9 +312,15 @@ export function buildTelemetryMetrics(state: TeslaVehicleState): {
   };
 
   if (state.includeLocation) {
-    metrics.latitude = state.latitude;
-    metrics.longitude = state.longitude;
+    rawMetrics.latitude = state.latitude;
+    rawMetrics.longitude = state.longitude;
   }
+
+  const metrics = Object.fromEntries(
+    Object.entries(rawMetrics).filter(([, value]) =>
+      ["boolean", "number", "string"].includes(typeof value),
+    ),
+  ) as Record<string, boolean | number | string>;
 
   const units: Record<string, string> = {
     battery_level: "%",
