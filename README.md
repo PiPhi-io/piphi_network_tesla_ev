@@ -1,6 +1,6 @@
 # piphi_network_tesla_ev
 
-`piphi_network_tesla_ev` is a PiPhi runtime integration for Tesla vehicles using the Tesla Fleet API and the PiPhi TypeScript runtime SDK.
+`piphi_network_tesla_ev` is a Python PiPhi runtime integration for Tesla vehicles using FastAPI, the Tesla Fleet API, and `piphi-runtime-kit-python`.
 
 This first version focuses on:
 
@@ -63,25 +63,19 @@ Tesla’s Fleet API is regional. Current regional base URLs are:
 Install dependencies:
 
 ```bash
-npm install
-```
-
-Build:
-
-```bash
-npm run build
+pdm install -G dev
 ```
 
 Run tests:
 
 ```bash
-npm test
+pdm run pytest
 ```
 
 Start the runtime:
 
 ```bash
-npm start
+pdm run piphi-network-tesla-ev
 ```
 
 Default port:
@@ -106,12 +100,11 @@ Useful routes:
 
 ## Notes for PiPhi
 
-The runtime uses `piphi-runtime-kit-node` for:
+The runtime uses `piphi-runtime-kit-python` for:
 
-- runtime auth syncing
-- config response helpers
-- entity response helpers
-- telemetry delivery
-- runtime health/diagnostics helpers
+- runtime authentication and Core telemetry delivery
+- config, health, diagnostics, entity, and event contracts
+- durable SQLite-backed automation action idempotency
+- FastAPI command dispatch adapters
 
-It intentionally keeps the first Tesla EV version dependency-light by using Node’s built-in HTTP server instead of adding a web framework.
+Refresh and wake-up commands persist their idempotency results under `/.piphinetwork` by default, so worker retries or restarts do not repeat a completed vehicle action.
