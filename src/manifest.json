@@ -2,7 +2,7 @@
   "manifest_version": "1.0",
   "id": "piphi-network-tesla-ev",
   "name": "PiPhi Network Tesla EV",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Tesla Fleet API vehicle integration for Tesla EV discovery, status refresh, and wake-up flows.",
   "maintainer": {
     "name": "PiPhi Network",
@@ -13,7 +13,7 @@
     "linux": {
       "type": "container",
       "container": {
-        "image": "piphinetwork/tesla-ev:0.2.0",
+        "image": "piphinetwork/tesla-ev:0.2.1",
         "ports": [
           { "container": 3090, "host": 3090 }
         ],
