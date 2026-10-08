@@ -81,7 +81,7 @@
     ],
     "runtime_fields": ["id", "container_id"],
     "identity_fields": ["vin", "region"],
-    "secrets": ["access_token"],
+    "secrets": [{"field": "access_token"}],
     "schema": {
       "title": "Tesla EV Integration Configuration",
       "description": "Configure one Tesla vehicle using a Tesla Fleet API access token and VIN.",
@@ -173,5 +173,10 @@
     { "id": "location", "name": "Location", "capabilities": ["latitude", "longitude", "heading_degrees"] },
     { "id": "refresh_action", "name": "Refresh", "capabilities": ["refresh"] },
     { "id": "wake_action", "name": "Wake Up", "capabilities": ["wake_up"] }
-  ]
+  ],
+  "ui": {
+    "experience_packages": [
+      {"registry_id": "io.piphi.tesla-vehicle", "version_range": ">=0.2,<1", "auto_install": true}
+    ]
+  }
 }

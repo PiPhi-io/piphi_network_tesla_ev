@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 from piphi_runtime_kit_python import (
     AutomationActionRequest,
@@ -221,6 +221,14 @@ async def refresh_entry(config_id: str) -> dict[str, Any]:
             payload={"message": str(exc)},
         )
     return registry.get(config_id) or updated
+
+
+async def refresh_all_state() -> None:
+    for config_id in registry.ids():
+        await refresh_entry(config_id)
+
+
+starter.state.provide(refresh_all_state, source=INTEGRATION_ID)
 
 
 async def apply_config(config: dict[str, Any]) -> dict[str, Any]:
@@ -474,8 +482,19 @@ def create_app() -> FastAPI:
         return build_config_remove_response(config_id=config_id, removed=remove_config(config_id))
 
     @application.get("/state")
-    async def state() -> dict[str, Any]:
+    async def state(
+        refresh: bool = Query(default=False),
+        refresh_request_id: str | None = Query(default=None),
+    ) -> dict[str, Any]:
+        try:
+            state_payload = await starter.state.response(
+                refresh=refresh,
+                refresh_request_id=refresh_request_id,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
         return {
+            **state_payload,
             "summary": {"activeConfigCount": len(registry.ids()), "recentEventCount": len(registry.recent_events)},
             "entries": dict(registry.entries),
             "stateSnapshots": dict(registry.state_snapshots),
