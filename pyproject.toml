@@ -1,6 +1,6 @@
 [project]
 name = "piphi-network-tesla-ev"
-version = "0.2.2"
+version = "0.2.3"
 description = "PiPhi Python runtime integration for Tesla Fleet API vehicle data."
 requires-python = ">=3.11"
 dependencies = [
