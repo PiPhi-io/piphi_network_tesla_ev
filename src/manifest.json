@@ -178,5 +178,8 @@
     "experience_packages": [
       {"registry_id": "io.piphi.tesla-vehicle", "version_range": ">=0.2,<1", "auto_install": true}
     ]
+  },
+  "onboarding": {
+    "mode": "account"
   }
 }
